@@ -39,7 +39,7 @@ angular.module("ngBookmark")
     bookmarkName : ''
    };
 
-   $scope.toogleBookmarkListViewType = function () {
+   $scope.toggleBookmarkListViewType = function () {
     if($scope.bookmarkListViewType === 'grid'){
       $scope.bookmarkListViewType = 'list';
     }else{
