@@ -1,0 +1,32 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../jquery/jquery-1.9.1.min.js"></script>
+ <script src="../sparkline/sparkline.js"></script>
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+  angular.module('sampleApp', []).
+ directive('ngSparkline', [function () {
+  return {
+   restrict: 'EA',
+   scope : {
+    chartData : "="
+   },
+   link: function (scope, iElement, iAttrs) {
+    var options = { type : iAttrs.chartType || 'line' };
+    jQuery(iElement).sparkline(scope.chartData, options);
+   }
+  };
+ }]).
+controller('sampleCtrl',function ($scope) {
+ $scope.chartData1 = [1,22,4,2,12,3];
+ $scope.chartData2 = [3,4,2,10,3,4,11];
+});
+ </script>
+</head>
+<body ng-controller="sampleCtrl">
+ <ng-sparkline chart-data="chartData1" chart-type="bar"></ng-sparkline>
+ <div ng-sparkline chart-data="chartData2"></div>
+</body>
+</html>

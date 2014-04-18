@@ -1,0 +1,25 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', []).
+  config(function ($httpProvider) {
+   $httpProvider.defaults.headers.common['Accept'] = "application/xml";
+   $httpProvider.defaults.headers.post['Content-Type'] = "application/xml";
+  }).
+  controller('mainCtrl',function($scope, $http) {
+   $scope.header = $http.defaults.headers;
+   $http({method: 'GET', url: 'xml/test.xml'}).
+   	success(function (data) {
+   	 console.log(data);
+   	});
+  });
+ </script>
+</head>
+<body ng-controller="mainCtrl">
+ <div>현재 $http 헤더정보</div>
+ <p>{{header}}</p>  
+</body>
+</html>

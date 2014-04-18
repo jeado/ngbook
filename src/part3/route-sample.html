@@ -1,0 +1,80 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <style>
+  ul { padding: 0;}
+  ul.menu li{
+   padding: 5px;
+   border: 1px solid black;
+   background: black;
+   display: inline;
+  }
+  ul li a {
+   text-decoration: none;
+   color: white;
+  }
+ </style>
+ <script src="../angular/angular.js"></script>
+ <script src="../angular/angular-route.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', ['ngRoute']).
+  config(function ($routeProvider) {
+   $routeProvider
+   	.when('/test',{
+   		template: function (routerParam,b) {
+   			console.log('routerParam',routerParam,b);
+   			return "<h1>ddd</h1>"
+   		}
+   	})
+    .when('/home', {templateUrl: 'template/home.tmpl.html'})
+    .when('/about', {templateUrl: 'template/about.tmpl.html', controller: 'aboutCtrl'})
+    .when('/contact', {templateUrl: 'template/contact.tmpl.html', controller: 'contactCtrl'})
+    .otherwise({redirectTo: '/home'});
+  }).
+  controller('mainCtrl',function($scope, $route,$location) {
+   $scope.route = $route;
+   $scope.routes = $route.routes;
+console.log($location.path());
+   $scope.$on("$routeChangeSuccess",function(e,cRoute,pRoute) {
+   	console.log("현재 라우트 정보 : ", cRoute.loadedTemplateUrl);
+   	if(pRoute) console.log("이전 라우트 정보 : ", pRoute.loadedTemplateUrl);
+   })
+   $scope.reload = function() {
+   	$route.reload();
+   };
+  }).
+  controller('aboutCtrl',function($scope) {
+   $scope.sales = 20000000;
+  }).
+  controller('contactCtrl',function($scope) {
+   $scope.contactSubmit = function(contact) {
+    alert(contact.name+"에게 "+contact.contents+"를 전달했습니다.");
+   };
+  });
+ </script>
+</head>
+<body ng-controller="mainCtrl">
+ <ul class="menu">
+  <li><a href="#home">홈</a></li>
+  <li><a href="#about">회사에 관하여</a></li>
+  <li><a href="#contact">회사 연락</a></li>
+ </ul>
+ <ng-view></ng-view>
+ <hr>
+ <div>
+  <h2>라우트 정보</h2>
+  <h3>현재 라우트 정보</h3>
+  {{route.current}}
+  <br>
+  <h4>등록된 라우트 정보</h4>
+  <ul>
+   <li ng-repeat="(key, value) in routes">
+    <h5>{{key}}</h5>
+    <p>{{value}}</p>
+   </li>
+  </ul>
+ </div>
+ <button ng-click="reload()">리로드</button>
+</body>
+</html>

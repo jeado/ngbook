@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <title>mustache template</title>
+ <script src="../jquery/jquery-1.9.1.min.js"></script>
+ <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.js"></script>
+ <script>
+ $(function() {
+  var person = {
+   name: "재도",
+   favorit : ["사과","딸기","포도"]
+  };
+  var template = $("#personTpl").html();
+  var html = Mustache.render(template, person); 
+  $("body").html(html);
+ });
+ </script>
+</head>
+<body>
+ <script type="text/template" id="personTpl">
+  <h1>hello {{name}}</h1>
+  <h2>좋아하는 과일</h2>
+  <ul>
+   {{#favorit}}
+    <li><a href='#{{.}}'>{{.}}</a></li>
+   {{/favorit}}
+  </ul>
+ </script>
+</body>
+</html>

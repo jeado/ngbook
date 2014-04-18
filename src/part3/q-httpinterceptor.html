@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', []).
+  config(function ($httpProvider) {
+   $httpProvider.interceptors.push(function($q, $timeout) {
+    return {
+     'request': function(config) {
+      return $timeout(function(){
+       return config;
+      }, 3000);
+     },
+     'response': function(response) {
+      return response || $q.when(response);
+     }
+    };
+   });
+  }).
+  controller('mainCtrl',function($scope, $http) {
+   $scope.send = function () {
+    $http({method: 'GET', url: 'json/sample.json'}).
+    success(function (data) {
+     $scope.result = data;
+    });
+   }
+  });
+ </script>
+</head>
+<body ng-controller="mainCtrl">
+ <button ng-click="send()">요청보내기</button>
+ <p>{{result}}</p>
+</body>
+</html>

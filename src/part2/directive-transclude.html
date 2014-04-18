@@ -1,0 +1,68 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <style type="text/css">
+    .panel{
+      margin: 10px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      border-radius: 2px;
+      border: 1px solid black;
+    }
+    .panel.info .panel-title{
+      background-color: gray;
+      color : white;
+    }
+    .panel.alert .panel-title{
+      background-color: red;
+      color : white;
+    }
+    .panel .panel-title{
+      background-color: black;
+      color : white;
+      padding: 10px;
+    }
+    .panel .panel-content{
+      padding: 10px;
+    }
+  </style>
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  angular.module('sampleApp', []).
+    controller('demoCtrl', ['$scope', function ($scope) {
+      $scope.noticeList = [{
+        url : "notice/1",
+        text: "공지사항 첫번째 글입니다."
+      },{
+        url : "notice/2",
+        text: "공지사항 두번째 글입니다."
+      },{
+        url : "notice/3",
+        text: "공지사항 세번째 글입니다."
+      }];
+    }]).
+    directive('panel', function () {
+      return {
+        templateUrl:"template/panelTmpl.html",
+        restrict : "AE",
+        transclude: true,
+        scope: {
+          title : "@",
+          type : "@",
+        }
+      }
+    });
+  </script>
+</head>
+<body ng-controller="demoCtrl">
+  <panel title="알림" type="alert">
+    <p>AngularJS는 자바스크립트 웹 어플리케이션을 쉽게 개발하게 도와줍니다.</p>
+  </panel>
+  <panel title="공지사항 목록" type="info">
+    <ul>
+      <li ng-repeat="notice in noticeList"><a href="{{notice.url}}">{{notice.text}}</a></li>
+    </ul>
+  </panel>
+</body>
+</html>

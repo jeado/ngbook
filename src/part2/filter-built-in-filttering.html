@@ -1,0 +1,51 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', [])
+ .controller('mainCtrl', ['$scope', function ($scope) {
+  $scope.userList = [
+   {userId:'jay',userName:'제이',userEmail:'jay@ng.com'},
+   {userId:'soon',userName:'순희',userEmail:'soon@ng.com'},
+   {userId:'cindy',userName:'가영',userEmail:'cindy@ng.com'},
+   {userId:'mino',userName:'민호',userEmail:'mino@ng.com'},
+   {userId:'teapong',userName:'태홍',userEmail:'teapong@ng.com'}
+  ];
+ }]);
+ </script>
+</head>
+<body>
+ <div ng-controller="mainCtrl">
+  <h1>필터사용 예제</h1>
+	<div>사용자 이름:<input type="text" ng-model="search.userName"></div>
+ 	<ul>
+   <li ng-repeat="user in userList | filter:search">
+    <p>{{user.userId}} | {{user.userName}} | {{user.userEmail}}</p>
+   </li>
+ 	</ul>
+ 	<h2>limitTo 필터 사용</h2>
+ 	<div>제한 갯수:<input type="number" ng-model="limitNum"></div>
+ 	<ul>
+   <li ng-repeat="user in userList | limitTo:limitNum">
+    <p>{{user.userId}} | {{user.userName}} | {{user.userEmail}}</p>
+   </li>
+  </ul>
+  <h2>orderBy 필터 사용</h2>
+  <div>
+   정렬 순서 :
+   아이디 <input type="radio" ng-model="order" value="userId">
+   이름 <input type="radio" ng-model="order" value="userName">
+   <br>
+   역순 여부 :
+   <input type="checkbox" ng-model="reverse">
+  </div>	
+  <ul>
+   <li ng-repeat="user in userList | orderBy:order:reverse">
+    <p>{{user.userId}} | {{user.userName}} | {{user.userEmail}}</p>
+   </li>
+  </ul> 	
+ </div>
+</body>
+</html>

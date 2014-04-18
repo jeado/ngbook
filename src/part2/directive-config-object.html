@@ -1,0 +1,49 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  angular.module('sampleApp', []).
+    directive('hello',function ($log) {
+      return {
+        name: 'hello',
+        priority: 0,
+        // terminal: false,
+        template: '<div></div>',
+        // templateUrl: 'directive.html',
+        replace: false,
+        transclude: false,
+        restrict: 'A',
+        scope: false,
+        // require: 'ngModel',
+        controller: function($scope, $element, $attrs, $transclude) {
+        },
+        compile: function compile(tElement, tAttrs, transclude) {
+          return {
+            pre: function preLink(scope, iElement, iAttrs, controller){
+
+            },
+            post: function postLink(scope, iElement, iAttrs, controller){
+              $log.log("<h1>hello "+iAttrs.name+"</h1>");
+              iElement.html("<h1>hello "+iAttrs.name+"</h1>");
+            }
+          }
+          // 또는
+          // return function postLink(scope, iElement, iAttrs, controlle) { }
+        },
+        // 또는
+        // link: {
+        //  pre: function preLink(scope, iElement, iAttrs, controller) { },
+        //  post: function postLink(scope, iElement, iAttrs, controller){ }
+        // }
+        // 또는
+        // link: function postLink(scope, iElement, iAttrs, controller) {}
+      };
+    });
+  </script>
+</head>
+<body>
+  <div hello name="angularJS"></div>
+</body>
+</html>

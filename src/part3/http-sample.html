@@ -1,0 +1,74 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <style type="text/css">
+  .info{
+   margin: 0px auto;
+   height: 20px;
+   background-color: aliceblue;
+  }
+  .info button{
+    float: right;
+  }
+ </style>
+ <script src="../jquery/jquery-1.9.1.min.js"></script>
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', []).
+  directive('infoBox', [function () {
+   return {
+    restrict: 'E',
+    scope : { infoMessage : '=' },
+    template : '<p class="info">{{infoMessage}}<button ng-click="hide()">x</button></p>',
+    link: function (scope, iElement, iAttrs) {
+     scope.$watch("infoMessage",function(newData,beforeData) {
+      if(newData === undefined || newData === ''){
+       scope.hide();
+      }else {
+       iElement.show({
+        duration : 3000,
+        complete : function() {
+         iElement.hide();
+        }
+       });
+      }
+     });
+     scope.hide = function () {
+      iElement.hide();
+      scope.infoMessage = undefined;
+     };
+    }
+   };
+  }]).
+  controller('mainCtrl',function($scope, $http) {
+   $scope.user = {};
+   $scope.search = function() {
+    var reqPromise = $http({
+     method : 'GET',
+     url : 'json/sample.json'
+    });
+    reqPromise.success(function(data,status,headers,config) {
+     $scope.user = data;
+    });
+    reqPromise.then(function(response) {
+     $scope.msg = response.data.userId+"로딩 완료.";
+    },function(response) {
+     $scope.msg = "Error!";
+    });
+   };
+  });
+ </script>
+</head>
+<body ng-controller="mainCtrl">
+ <info-box info-message="msg"></info-box>
+ <p class="user">
+  사용자 아이디 : {{user.userId}}
+  <br>
+  사용자 이름 : {{user.userName}}
+  <br>
+  사용자 이메일 : {{user.userEmail}}
+ </p>
+ <div><button ng-click="search()">조회</button></div>
+ </body>
+</html>

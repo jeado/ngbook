@@ -1,0 +1,53 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  angular.module('sampleApp', []).
+    constant('PI', 3.14159).
+    provider('Cal', [function () {
+      var defaultRadius = 10;
+
+      this.setDefaultRadius = function(radius) {
+        defaultRadius = radius;
+      };  
+    
+      this.$get = ['PI',function(PI) {
+        return {
+          getCircleArea : function(radius) {
+            var r = radius || defaultRadius;
+            return r*r*PI;
+          }
+        };
+      }];
+    }]).
+    config(function (CalProvider, PI) {
+      CalProvider.setDefaultRadius(5);
+      console.log(PI);
+    }).
+    directive('circle', ['Cal','PI',function (Cal,PI) {
+      return {
+        restrict: 'E',
+        template : '<canvas width="100" height="100"></canvas>',
+        link: function (scope, iElement, iAttrs) {
+          var context = iElement.find("canvas")[0].getContext('2d');
+          var radius = 30;
+
+          context.beginPath();
+          context.arc(50, 50, radius, 0, 2 * PI, false);
+          context.fillStyle = 'green';
+          context.fill();
+          context.lineWidth = 5;
+          context.strokeStyle = '#003300';
+          context.stroke();
+          iElement.append("<p>반지름 30px인 원의 넓이 : "+Cal.getCircleArea(radius)+"px </p>")
+        }
+      };
+    }])
+  </script>
+</head>
+<body>
+  <circle></circle>
+</body>
+</html>

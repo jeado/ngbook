@@ -1,0 +1,38 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  function Calculator () {
+    this.lastValue = 0;
+
+    this.add = function(a,b) {
+      var returnV = a+b;
+      this.lastValue = returnV;
+      return returnV;
+    };
+    this.minus = function(a,b) {
+      var returnV = a-b;
+      this.lastValue = returnV;
+      return returnV;
+    };
+  }
+  angular.module('sampleApp', []).
+    factory('CalcByF', [function () {
+      return new Calculator();
+    }]).
+    service('CalcByS', Calculator).
+    controller('mainCtrl',function($scope, CalcByS, CalcByF) {
+      $scope.val1 = CalcByF.add(10,3);
+      console.log(CalcByF.lastValue);
+      $scope.val2 = CalcByS.minus(20,10);
+      console.log(CalcByS.lastValue);
+    });
+  </script>
+</head>
+<body ng-controller="mainCtrl">
+  <p>10 + 3 = {{val1}}</p>
+  <p>20 - 10 = {{val2}}</p>
+</body>
+</html>

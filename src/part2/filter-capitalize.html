@@ -1,0 +1,25 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', [])
+ .config(function ($filterProvider) {
+  $filterProvider.register('capitalize', function(){
+   return function(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+   };
+  });
+ })
+ .controller('mainCtrl', ['$scope', function ($scope) {
+  $scope.hello = "hello";
+ }]);
+ </script>
+</head>
+<body>
+ <div ng-controller="mainCtrl">
+  <p>{{hello | capitalize}}</p>
+ </div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<button style="margin-right: 10px;" type="button" class="btn btn-default navbar-btn" ng-click="newBookmark()">
+ <span class="glyphicon glyphicon-plus"></span> 새로운 북마크 추가
+</button>
+<div class="list-group" ng-if="bookmarkListViewType=='list'">
+ <a ng-repeat="bookmark in bookmarkList" ng-href="#/bookmarks/{{bookmark._id.$oid}}" class="list-group-item">
+  <span class="badge pull-right">{{bookmark.bookmarkName}}</span> 
+  <span>{{bookmark.bookmarkUrl}}</span>
+ </a>
+</div>
+<div class="grid" ng-if="bookmarkListViewType=='grid'">
+ <div class="panel panel-default" ng-repeat="bookmark in bookmarkList">
+  <div class="panel-heading">
+   <a ng-href="#/bookmarks/{{bookmark._id.$oid}}">{{bookmark.bookmarkName}}</a>
+  </div>
+  <div class="panel-body">
+   <img ng-src="http://free.pagepeeker.com/v2/thumbs.php?size=l&url={{bookmark.bookmarkUrl}}">
+   <p>{{bookmark.bookamrkUrl}}</p>
+  </div>
+ </div>
+</div>   

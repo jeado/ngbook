@@ -1,0 +1,27 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  angular.module('sampleApp', [])
+.factory('hello', [function () {
+  var helloText = "님 안녕하세요.";
+
+  return {
+    say : function (name) {
+      return name + helloText;
+    }
+  };
+}])
+.controller('mainCtrl', ['$scope','hello', function ($scope, hello) {
+  $scope.hello = hello.say("철수");
+}]);
+  </script>
+</head>
+<body>
+  <div ng-controller="mainCtrl">
+    <p>{{hello}}</p>
+  </div>
+</body>
+</html>

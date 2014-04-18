@@ -1,0 +1,28 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  angular.module('sampleApp', []).
+directive('hello', function () {
+  return {
+    templateUrl:"template/helloTmpl.html",
+    // template:"<h1>hello <span>name</span></h1>",
+    restrict : "AE",
+    controller : function ($scope, $element, $attrs, $transclude) {
+      $scope.name = $attrs.name;
+    },
+    // link : function link (scope, iEl, iAt, ctrl) {
+    //   scope.name = iAt.name;
+    // }
+  }
+});
+  </script>
+</head>
+<body>
+  <div hello name="angularJS"></div>
+  <div hello name="google"></div>
+  <div hello name="naver"></div>
+</body>
+</html>

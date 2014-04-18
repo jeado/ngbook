@@ -1,0 +1,13 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <meta charset="UTF-8">
+    <script src="../angular/angular.js"></script>
+  </head>
+  <body>
+    약관에 동의: <input type="checkbox" ng-model="checked" ng-init="checked=false" />
+    <br/>
+    동의하면 다음으로 진행됩니다.
+    <button ng-if="checked">다음</button>
+  </body>
+</html>

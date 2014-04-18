@@ -1,0 +1,30 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  //AngularJS 웹 어플리케이션 내부 세상
+  angular.module('sampleApp', []).
+    factory('Hello', [function () {
+      return {
+        helloTo : function(name) {
+          console.log('hello '+name);
+        }
+      };
+    }])
+
+  //AngularJS 웹 어플리케이션 외부 세상
+  var injector = angular.injector(['ng','sampleApp']),
+      hasHello = injector.has('Hello'),
+      HelloSvc = null;
+
+  if(hasHello){
+    HelloSvc = injector.get('Hello');
+    HelloSvc.helloTo("철수");
+  }
+  </script>
+</head>
+<body>
+</body>
+</html>

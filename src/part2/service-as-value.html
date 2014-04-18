@@ -1,0 +1,17 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  angular.module('sampleApp', []).
+    value('AppNm', 'demo app').
+    controller('mainCtrl',function($scope, AppNm) {
+      $scope.appNm = AppNm;
+    });
+  </script>
+</head>
+<body ng-controller="mainCtrl">
+  <p>어플리케이션 이름 : {{appNm}}</p>
+</body>
+</html>

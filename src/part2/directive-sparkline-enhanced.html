@@ -1,0 +1,41 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="utf-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta name="description" content="ngBookmark Web App">
+ <meta name="author" content="Jeado Ko">
+ <script src="../jquery/jquery-1.9.1.min.js"></script>
+ <script src="../sparkline/sparkline.js"></script>
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+  angular.module('sampleApp', []).
+ directive('ngSparkline', [function () {
+  return {
+   restrict: 'EA',
+   scope : {
+    chartData : "="
+   },
+   link: function (scope, iElement, iAttrs) {
+    var options = { type : iAttrs.chartType || 'line' };
+    scope.$watch('chartData',function(bfData,afData) {
+    	jQuery(iElement).sparkline(scope.chartData, options);
+    },true);
+   }
+  };
+ }]).
+controller('sampleCtrl',function ($scope) {
+	$scope.chartData = [0,0,0];
+});
+ </script>
+</head>
+<body ng-controller="sampleCtrl">
+ <div>
+  <input type="number" ng-model="chartData[0]"><input type="number" ng-model="chartData[1]"><input type="number" ng-model="chartData[2]">
+	<br>
+	<p>데이터 : {{chartData}}</p>
+ </div>
+ <ng-sparkline chart-data="chartData" chart-type="bar"></ng-sparkline>
+</body>
+</html>

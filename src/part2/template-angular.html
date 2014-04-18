@@ -1,0 +1,15 @@
+<!doctype html>
+<html ng-app>
+ <head>
+  <meta charset="UTF-8">
+  <title>mustache template</title>
+  <script src="../angular/angular.js"></script>
+ </head>
+ <body ng-init="person = { name: '재도', favorit : ['사과','딸기','포도']}">
+  <h1>hello {{person.name}}</h1>
+  <h2>좋아하는 과일</h2>
+  <ul ng-repeat="fruit in person.favorit">
+   <li><a href='#{{fruit}}'>{{fruit}}</a></li>
+  </ul>
+ </body>
+</html>

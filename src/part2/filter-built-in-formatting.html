@@ -1,0 +1,40 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', []).
+  controller('mainCtrl', ['$scope', function ($scope) {
+   $scope.cValue = 6300;
+   $scope.dNow = new Date();
+   $scope.jObj = {name:'순희'};
+   $scope.lString = 'Cindy Kim';
+   $scope.nValue = 10/3;
+  }]);
+ </script>
+</head>
+<body>
+ <div ng-controller="mainCtrl">
+  <h1>필터사용 예제</h1>
+  <h2>currency 필터 사용</h2>
+  <p>원래 : {{cValue}}</p>
+  <p>필터 적용 : {{cValue | currency}}</p>
+  <h2>date 필터 사용</h2>
+  <p>원래 : {{dNow}}</p>
+  <p>필터 적용 : {{dNow | date:'yyyy년 mm월 dd일'}}</p>
+  <h2>JSON 필터 사용</h2>
+  <p>원래 : {{jObj}}</p>
+  <p>필터 적용: {{jObj | json}}</p>
+  <h2>lowercase 필터 사용</h2>
+  <p>원래 : {{lString}}</p>
+  <p>필터 적용: {{lString | lowercase}}</p>
+  <h2>uppercase 필터 사용</h2>
+  <p>원래 : {{lString}}</p>
+  <p>필터 적용: {{lString | uppercase}}</p>
+  <h2>number 필터 사용</h2>
+  <p>원래 : {{nValue}}</p>
+  <p>필터 적용: {{nValue | number:5}}</p>
+ </div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../jquery/jquery-1.9.1.min.js"></script>
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', []).
+  value('baseUrl', 'http://localhost:9000/').
+  controller('mainCtrl',function($scope, $http, baseUrl) {
+   $scope.user = {};
+   $scope.editable = false;
+   $scope.search = function(searchObj) {
+    var reqPromise = $http.get(baseUrl+'getUser',{
+     params:searchObj
+    });
+    reqPromise.success(function(data,status,headers,config) {
+     if(data.userId) {
+      $scope.user = data;
+      $scope.isSearched = true;
+     }
+     $scope.error = undefined;
+    });
+    reqPromise.error(error);
+   };
+
+   $scope.insert = function() {
+    $scope.edit="insert";
+    $scope.editable = true;
+    $scope.user={};
+   };
+
+   $scope.update = function() {
+    $scope.edit="update";
+    $scope.editable = true;
+   };
+
+   $scope.save = function(edit,user) {
+    var reqPromise;
+    switch(edit){
+     case "insert" :
+      reqPromise = $http.post(baseUrl+'insertUser',user);
+      break;
+     case "update":
+      reqPromise = $http.put(baseUrl+'updateUser',user);
+      break;
+     default :
+      reqPromise = {};
+      break; 
+    }
+    reqPromise.success(function(data,status,headers,config) {
+     reset();
+    });
+    reqPromise.error(error);   	
+   };
+
+   $scope.delete = function(user) {
+    $http.delete(baseUrl+'deleteUser',{
+     params : user
+    }).success(function() {
+     reset();
+    });
+   };
+
+   $scope.cancle = function() {
+    reset();
+   };
+
+   function error(data,status,headers,config) {
+    $scope.user = {};
+    $scope.error = "로드실패";
+   }
+   function reset(){
+    $scope.user = {};
+    $scope.edit = undefined;
+    $scope.error = undefined;
+    $scope.editable = false;
+   }
+  });
+ </script>
+</head>
+<body ng-controller="mainCtrl">
+ <div>
+  사용자 ID : <input type="text" ng-model="searchObj.userId">
+  <button ng-click="search(searchObj)" ng-disabled="editable">조회</button>
+ </div>
+ <p ng-if="error">{{error}}</p>	
+ <br>
+ <form class="user" name="userForm">
+  사용자 아이디 : <input type="text" ng-model="user.userId" ng-disabled="!editable && edit!='insert'">
+  <br>
+  사용자 이름 : <input type="text" ng-model="user.userName" ng-disabled="!editable">
+  <br>
+  사용자 이메일 : <input type="text" ng-model="user.userEmail" ng-disabled="!editable">
+ </form>
+ <br>
+ <div ng-show="!edit">
+  <button ng-click="update()" ng-show="isSearched">수정</button>
+  <button ng-click="insert()">신규</button>
+  <button ng-click="delete(user)" ng-show="isSearched">삭제</button>
+ </div>
+ <div ng-show="edit">
+  <button ng-click="save(edit,user)">저장</button>
+  <button ng-click="cancle()">취소</button>
+ </div>
+</body>
+</html>

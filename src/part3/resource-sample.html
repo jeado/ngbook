@@ -1,0 +1,42 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../angular/angular.js"></script>
+ <script src="../angular/angular-resource.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', ['ngResource']).
+  value('mogolabApiKey','50728d46e4b088be4c29ea02').
+  run(function ($resource,mogolabApiKey) {
+   var TodoResource = $resource('https://api.mongolab.com/api/1/databases/sample/collections/todos/:todoId?apiKey=:apiKey',{ apiKey: mogolabApiKey },{
+     'update' : {
+       method: 'PUT'
+     }
+   });
+
+   var todo1 = new TodoResource;
+    todo1.done = false;
+    todo1.title = "공부하기";
+
+    todo1.$save(function () {
+     //MongoLab RESTful 웹 서비스 별도의 아이디를 지정하지 않으면 도큐먼트 생성 시 _id 속성안에 $oid에 난수 값을 포함하는 객체를 만들게 된다.
+     var id = todo1["_id"].$oid;
+     TodoResource.update({
+      todoId : id
+     },JSON.stringify({done : true, title: todo1.title}),function () {
+      var updatedTodo1 = TodoResource.get({
+       todoId : id
+      },function () {
+       if(updatedTodo1.done === true){
+        updatedTodo1.$delete({
+         todoId : id
+        });
+       }
+      });
+    })
+  });
+ });
+ </script>
+</head>
+<body>
+</html>

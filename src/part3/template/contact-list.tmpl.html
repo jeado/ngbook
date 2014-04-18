@@ -1,0 +1,8 @@
+<h2>연락처 목록</h2>
+<ul class="contact-list">
+	<li ng-repeat="contact in contactList" ng-click="viewDetail(contact.id)">
+		<span>{{contact.name}}</span>
+		<span>{{contact.email}}</span>
+		<span>{{contact.phone}}</span>
+	</li>
+</ul>

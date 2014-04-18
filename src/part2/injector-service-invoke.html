@@ -1,0 +1,61 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../jquery/jquery-1.9.1.min.js"></script>
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  //AngularJS 웹 어플리케이션 내부 세상
+  angular.module('sampleApp', []).
+    factory('Hello', [function () {
+      return {
+        helloTo : function(name) {
+          return 'hello '+name;
+        }
+      };
+    }])
+
+  //AngularJS 웹 어플리케이션 외부 세상
+  $(function() {
+  	var injector = angular.injector(['ng','sampleApp']),
+  			invokedReturnValue = null,
+  			helloAppenderInstance1 = null,
+  			helloAppenderInstance2 = null;
+		
+		invokedReturnValue = injector.invoke(function(Hello) {
+			var hello = Hello.helloTo('철수');
+  		$('body').append(hello);
+
+  		return hello;
+  	});
+
+  	function HelloAppender(Hello, $compile, $rootScope) {
+  		var helloEl = $('<p>{{hello}}</p>');
+  		var scope = $rootScope.$new();
+  		
+  		scope.hello = "";
+
+			$('body').append($compile(helloEl)(scope));
+
+  		this.setName = function(name) {
+  			scope.hello = Hello.helloTo(name);
+	  		scope.$digest();
+  		};
+  	}
+
+  	helloAppenderInstance1 = injector.instantiate(HelloAppender);
+  	helloAppenderInstance2 = injector.instantiate(HelloAppender);
+  	helloAppenderInstance1.setName("영희");
+  	helloAppenderInstance2.setName("가영");
+
+  	console.log("invokedReturnValue :",invokedReturnValue);
+  	console.log("helloAppenderInstance1 :",helloAppenderInstance1);
+  	console.log("helloAppenderInstance2 :",helloAppenderInstance2);
+  	
+  });
+     
+  </script>
+</head>
+<body>
+</body>
+</html>

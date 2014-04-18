@@ -1,0 +1,14 @@
+<h1>Contact</h1>
+ <p>회사 전화번호 : 0000-0000</p>
+ <p>회사 대표 이메일 : info@angular.com</p>
+ <br>
+ <h2>회사에 궁금한점 문의하기</h2>
+<form>
+	<label>이름</label>
+	<input type="text" name="name" ng-model="contact.name" required>
+	<br>
+	<label>용건</label>
+	<textarea name="name" ng-model="contact.contents" required></textarea>
+	<br>
+	<button ng-click="contactSubmit(contact)">전송</button>
+</form>

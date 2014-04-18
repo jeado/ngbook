@@ -1,0 +1,69 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', []).
+  factory('Teacher', [function () {
+   function Teacher (name) {
+    this.name = name;
+   }
+   Teacher.prototype.makeScore = function (data) {
+    if(data>5){
+     return 100;
+    }else{
+     return 4;
+    }
+   }
+   Teacher.prototype.giveCandy = function (num,student) {
+    return student.name+"(군/양) 사탕"+num+"개 받으세요.";
+   }
+   Teacher.prototype.hitHip = function (num,student,error) {
+    return student.name+"(군/양) 엉덩이"+num+"대 맞으세요.",error;
+   }
+   return Teacher;
+ }]).
+ factory('Student', ['$q','$timeout',function ($q, $timeout) {
+  function Student (name) {
+   this.name = name;
+  }
+  Student.prototype.doHomework = function  (homework) {
+   var deferred = $q.defer(),
+       time = (Math.random() * 10 + homework.length)*500;
+       console.log("숙제하는데 걸리는 시간 :",time);
+   $timeout(function () {
+    var homeworkResult = time/1000;
+        console.log("숙제 결과 : ",homeworkResult);
+    if (time<6000){
+     deferred.resolve(homeworkResult);
+    }
+    else{
+     deferred.reject("핑계들..");
+    }
+   },time);
+  	
+   return deferred.promise
+  }
+  return Student;
+ }]).
+ controller('mainCtrl',function($scope, $timeout,Teacher, Student) {
+  var jay = new Student('jay'),
+      cindy = new Teacher('cindy'),
+      promiseWithStudent = jay.doHomework('숙제내용...');
+  
+  promiseWithStudent.then(function(data) {
+   if (cindy.makeScore(data)===100) {
+    console.log(cindy.giveCandy(100,jay));
+   } else {
+    console.log(cindy.giveCandy(50,jay));
+   }
+  }, function(error) {
+   console.log(cindy.hitHip(1000000,jay,error));
+  });
+ });
+ </script>
+</head>
+<body ng-controller="mainCtrl">
+</body>
+</html>

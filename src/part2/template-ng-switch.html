@@ -1,0 +1,39 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <meta charset="UTF-8">
+    <script src="../angular/angular.js"></script>
+    <style type="text/css">
+      .box{
+        width:100px;
+        height:100px;
+      }
+      .red {
+        background-color:red;
+      }
+      .green {
+        background-color:green;
+      }
+      .blue {
+        background-color:blue;
+      }
+      .black {
+        background-color:black;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <input type="radio" ng-model="color" value="red">  빨간색 <br/>
+      <input type="radio" ng-model="color" value="green"> 녹색 <br/>
+      <input type="radio" ng-model="color" value="blue"> 파란색 <br/>
+
+      <div ng-switch="color">
+        <div ng-switch-when="red" class="box red"></div>
+        <div ng-switch-when="green" class="box green"></div>
+        <div ng-switch-when="blue" class="box blue"></div>
+        <div ng-switch-default class="box black"></div>
+      </div>
+    </div>
+  </body>
+</html>

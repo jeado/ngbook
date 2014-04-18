@@ -1,0 +1,22 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <meta charset="UTF-8">
+    <style type="text/css">
+      .apple { background-color: red; }
+      .lemon { background-color: yellow; }
+      .even { background-color: blue; }
+    </style>
+    <script src="../angular/angular.js"></script>
+  </head>
+  <body>
+    <div ng-init="fruitList = ['apple','banana','tomato','lemon','grape']">
+      <ul>
+        <li ng-repeat="fruit in fruitList" ng-class="'{{fruit}}'">{{fruit}}</li>
+      </ul>
+      <ul>
+        <li ng-repeat="fruit in fruitList" ng-class="{'even' : {{$index%2==0}}}">{{fruit}}</li>
+      </ul>
+    </div>
+  </body>
+</html>

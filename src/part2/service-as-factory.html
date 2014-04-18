@@ -1,0 +1,51 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  angular.module('sampleApp', []).
+    factory('AppNm', [function () {
+      return 'demo app';
+    }]).
+    factory('UserResource', function () {
+      var userList = [];
+
+      return {
+        addUser : function(newUser) {
+          userList.push(newUser);
+        },
+        updateUser : function(idx, updatedUser) {
+          userList[idx] = updatedUser;
+        },
+        deleteUser : function(idx) {
+          userList[idx] = undefined;
+        },
+        selectUsers : function() {
+          return userList;
+        }
+      }
+    }).
+    controller('mainCtrl',function($scope, AppNm, UserResource) {
+      $scope.appNm = AppNm;
+
+      $scope.users = UserResource.selectUsers();
+
+      $scope.addNewUser = function(newUser) {
+        UserResource.addUser({
+          name : newUser.name,
+          email : newUser.email
+        });
+      };
+    });
+  </script>
+</head>
+<body ng-controller="mainCtrl">
+  <p>어플리케이션 이름 : {{appNm}}</p>
+  <div>
+    이름 : <input type="text" ng-model="newUser.name">, 이메일 : <input type="text" ng-model="newUser.email">
+    <button ng-click="addNewUser(newUser)">Add New User</button>
+  </div>
+  <ul><li ng-repeat="user in users">{{user.name}}, {{user.email}}</li></ul>
+</body>
+</html>

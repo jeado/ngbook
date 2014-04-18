@@ -1,0 +1,61 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  angular.module('sampleApp', []).
+    provider('Logger', [function () {
+      var defaultLogLevel = 'log';
+
+      function Logger(msg) {
+        if(checkNativeLogger) {
+          if(defaultLogLevel === "debug"){
+            console.debug(msg);
+            return;
+          }
+          if(defaultLogLevel === "info"){
+            console.info(msg);
+            return;
+          }
+          console.log(msg);
+        }
+      }
+
+      Logger.debug = function(msg) { if(checkNativeLogger) console.debug(msg); };
+      Logger.info = function(msg) { if(checkNativeLogger) console.info(msg); };
+
+      function checkNativeLogger() {
+        if(console) return true
+        return false;
+      }
+
+      this.setDefaultLevel = function(level) {
+        switch(level){
+          case 'debug': 
+            defaultLogLevel = 'debug';
+            break;
+          case 'info':
+            defaultLogLevel = 'info';
+            break;
+          default:
+            defaultLogLevel = 'log'
+        }
+      };
+
+      this.$get = [function() {
+        return Logger;
+      }];
+    }]).
+    config(['LoggerProvider',function (LoggerProvider) {
+      LoggerProvider.setDefaultLevel("debug");
+    }]).
+    controller('mainCtrl',function($scope, Logger) {
+      Logger("console.log로 출력하는 로그메시지");
+      Logger.debug("console.debug 출력하는 로그메시지");
+    });
+  </script>
+</head>
+<body ng-controller="mainCtrl">
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  angular.module('sampleApp', []).
+    controller('demoCtrl', ['$scope', function ($scope) {
+      $scope.helloList = [{name:'google'},{name:'naver'},{name:'angular'}];
+    }]).
+    directive('hello', function () {
+      return {
+        templateUrl:"template/helloTmpl3.html",
+        restrict : "AE",
+        scope: {
+          name : "=to"
+        }
+      }
+    });
+  </script>
+</head>
+<body ng-controller="demoCtrl">
+  <ul>
+    <li ng-repeat="helloSb in helloList">
+      <input type="text" ng-model="helloSb.name">
+    </li>
+  </ul>
+  <div ng-repeat="helloSb in helloList" hello to="helloSb.name"></div>
+</body>
+</html>

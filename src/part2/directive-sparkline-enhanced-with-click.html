@@ -1,0 +1,60 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="utf-8">
+ <script src="../jquery/jquery-1.9.1.min.js"></script>
+ <script src="../sparkline/sparkline.js"></script>
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+  angular.module('sampleApp', []).
+ directive('ngSparkline', [function () {
+  return {
+   restrict: 'EA',
+   scope : {
+    chartData : "=",
+    chartClick : "&"
+   },
+   link: function (scope, iElement, iAttrs) {
+    var options = { type : iAttrs.chartType || 'line' };
+    
+    scope.$watch('chartData',function(bfData,afData) {
+    	jQuery(iElement).sparkline(scope.chartData, options)
+    },true);
+
+    jQuery(iElement).bind('sparklineClick', function(ev) {
+     var sparkline = ev.sparklines[0],
+         region = sparkline.getCurrentRegionFields(),
+         regionX = region.x,
+         regionY = region.y;
+     //타입별로 반환해 주는 값이 다르다. bar타입은 x,y가 아니라 value만 있다.
+     if(regionX === undefined && region[0]) regionX = region[0].offset;
+     if(regionY === undefined && region[0]) regionY = region[0].value;
+     
+     scope.$apply(function(){
+      scope.chartClick({x : regionX, y: regionY});
+     });
+    });
+   }
+  };
+ }]).
+controller('sampleCtrl',function ($scope) {
+ $scope.chartData = [0,0,0];
+ $scope.selectedData = { x: null, y:null };
+ $scope.handleClick = function(x,y) {
+  $scope.selectedData.x = x;
+  $scope.selectedData.y = y;
+ };
+});
+ </script>
+</head>
+<body ng-controller="sampleCtrl">
+ <div>
+  <input type="number" ng-model="chartData[0]"><input type="number" ng-model="chartData[1]"><input type="number" ng-model="chartData[2]">
+  <br>
+  <p>데이터 : {{chartData}}</p>
+ </div>
+ <ng-sparkline chart-data="chartData" chart-type="bar" chart-click="handleClick(x,y)"></ng-sparkline>
+ <ng-sparkline chart-data="chartData" chart-type="line" chart-click="handleClick(x,y)"></ng-sparkline>
+  <p>선택한 데이터 : x는 {{selectedData.x}} y는 {{selectedData.y}}</p>
+</body>
+</html>

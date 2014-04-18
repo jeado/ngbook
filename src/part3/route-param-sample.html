@@ -1,0 +1,65 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <style>
+  ul { padding: 0;}
+  ul.contact-list li{
+   margin: 2px;
+   padding: 2px;
+   border: 1px solid yellow;
+   background: black;
+   color: white;
+  }
+  ul.contact-list li:hover{
+   background-color: yellow;
+   color: black;
+  }
+ </style>
+ <script src="../angular/angular.js"></script>
+ <script src="../angular/angular-route.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', ['ngRoute']).
+  config(function ($routeProvider) {
+   $routeProvider
+    .when('/contacts', {templateUrl: 'template/contact-list.tmpl.html', controller: 'contactListCtrl'})
+    .when('/contacts/:contactId', {templateUrl: 'template/contact-detail.tmpl.html', controller: 'contactDetailCtrl'})
+    .otherwise({redirectTo: '/contacts'});
+  }).
+  factory('ContactSvc', [function () {
+   var cList = [
+    {id:'c001',name:'순희',email:'soon@ng.com',phone:'011-2222-3333'},
+    {id:'c002', name:'철수',email:'cheol@ng.com',phone:'011-1111-3333'}
+   ];
+  
+   return {
+    getList : function() {
+     return cList;
+    },
+    get : function (id) {
+     var returnObj = {};
+     for (var i = 0; i < cList.length; i++) {
+      if(id===cList[i].id) {
+       returnObj = cList[i];
+       break;
+      } 
+     }
+     return returnObj;
+    }
+   };
+  }]).
+  controller('contactListCtrl',function($scope,ContactSvc,$location) {
+   $scope.contactList = ContactSvc.getList();
+   $scope.viewDetail = function(id) {
+    $location.path('/contacts/'+id);
+   };
+  }).
+  controller('contactDetailCtrl',function($scope,ContactSvc,$routeParams) {
+   $scope.contact = ContactSvc.get($routeParams.contactId);
+  });
+ </script>
+</head>
+<body>
+ <ng-view></ng-view>
+</body>
+</html>

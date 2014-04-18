@@ -1,0 +1,25 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', []).
+  controller('mainCtrl',function($scope, $q, $http) {
+   $scope.userList = [];
+   var httpPromise1 = $http.get('json/sample.json');
+   var httpPromise2 = $http.get('json/sample2.json');
+   
+   $q.all([httpPromise1, httpPromise2])
+    .then(function (resultArray) {
+     angular.forEach(resultArray, function(value, key){
+      $scope.userList.push(value.data);
+     });
+    });
+ });
+ </script>
+</head>
+<body ng-controller="mainCtrl">
+ <ul><li ng-repeat="user in userList">{{user.userName}}, {{user.userEmail}}</li></ul>
+</body>
+</html>

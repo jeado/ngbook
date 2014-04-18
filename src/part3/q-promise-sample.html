@@ -1,0 +1,40 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../angular/angular.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', []).
+  controller('mainCtrl',function($scope, $timeout) {
+   var threeSecPromise = $timeout(function() {
+    return $scope.answer;
+   },3000);
+
+   threeSecPromise.then(function(val) {
+    if(val == 39){
+     $scope.result="맞았어요.";
+    }else{
+     $scope.result="틀렸어요.";
+    }
+   },function () {
+    $scope.result="너무 어려웠나요?";
+   });
+
+   threeSecPromise.finally(function() {
+    $scope.info = "다시 시작하려면 refresh 하여 주세요."
+   });
+
+   $scope.giveUp = function() {
+    $timeout.cancel(threeSecPromise);
+   };	
+  });
+ </script>
+</head>
+<body ng-controller="mainCtrl">
+ <h1>3초안에 답을 말하세요!</h1>
+ 10-1+29+2-1 = <input ng-model="answer" ng-disabled="result">
+ <button ng-click="giveUp()">포기</button>
+ <p>{{result}}</p>
+ <p>{{info}}</p>			
+</body>
+</html>

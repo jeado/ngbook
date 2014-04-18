@@ -1,0 +1,47 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+ <meta charset="UTF-8">
+ <script src="../angular/angular.js"></script>
+ <script src="../angular/angular-resource.js"></script>
+ <script type="text/javascript">
+ angular.module('sampleApp', ['ngResource']).
+  value('mogolabApiKey','50728d46e4b088be4c29ea02').
+  run(function ($resource,mogolabApiKey,$q) {
+  	var TodoResource = $resource('https://api.mongolab.com/api/1/databases/sample/collections/todos/:todoId?apiKey=:apiKey',{
+  		apiKey: mogolabApiKey
+  	},{
+  		'update' : {
+  			method: 'PUT'
+  		}
+  	});
+
+  	var todo1 = new TodoResource;
+  			todo1.done = false;
+  			todo1.title = "공부하기";
+  
+		var updateTodo = function(data){
+			return TodoResource.update({todoId : data["_id"].$oid},JSON.stringify({done : true, title: data.title})).$promise;
+		};
+
+		var getTodo = function (data) {
+			return TodoResource.get({todoId : data["_id"].$oid}).$promise;
+		};
+
+		var deleteTodo = function (data) {
+			if(data.done === true){
+				return TodoResource.delete({todoId : todo1["_id"].$oid}).$promise;
+			}else{
+				return $q.when(data);
+			}
+		};
+
+		todo1.$save()
+			.then(updateTodo)
+			.then(getTodo)
+			.then(deleteTodo);
+  });
+ </script>
+</head>
+<body>
+</html>

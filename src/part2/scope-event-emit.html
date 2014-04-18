@@ -1,0 +1,50 @@
+<!doctype html>
+<html ng-app>
+ <head>
+  <meta charset="UTF-8">
+  <style>
+   .ng-scope {border: 1px solid red; padding: 5px;}
+   .msg-list-area { margin: 10px; height: 400px; border: 1px solid black;}
+  </style>
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+   function mainCtrl ($scope) {
+    $scope.broadcast = function(noticeMsg) {
+     $scope.$broadcast("chat:noticeMsg",noticeMsg);
+     $scope.noticeMsg = "";
+    };
+   }
+
+   function chatMsgListCtrl($scope,$rootScope) {
+    $scope.msgList = [];
+    $rootScope.$on("chat:newMsg",function(e,newMsg) {
+     $scope.msgList.push(newMsg);
+    });
+
+    $scope.$on("chat:noticeMsg" ,function(e,noticeMsg) {
+     $scope.msgList.push("[공지] "+noticeMsg);
+    });
+   }
+
+   function chatMsgInputCtrl($scope) {
+    $scope.submit = function(newMsg) {
+     $scope.$emit("chat:newMsg",newMsg);
+     $scope.newMsg = "";
+    };
+   }
+  </script>
+ </head>
+ <body ng-controller="mainCtrl">
+  <input type="text" ng-model="noticeMsg">
+  <input type="button" value="공지 전송" ng-click="broadcast(noticeMsg)">
+  <div class="msg-list-area" ng-controller="chatMsgListCtrl">
+   <ul>
+    <li ng-repeat="msg in msgList track by $index">{{msg}}</li>
+   </ul>
+  </div>
+  <div ng-controller="chatMsgInputCtrl">
+   <input type="text" ng-model="newMsg">
+   <input type="button" value="전송" ng-click="submit(newMsg)">
+  </div>
+ </body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <script src="../angular/angular.js"></script>
+  <script type="text/javascript">
+  angular.module('sampleApp', []).
+    controller('demoCtrl', ['$scope', function ($scope) {
+      $scope.name ="Ctrl에서 사용된 name 모델";
+    }]).
+    directive('hello', function () {
+      return {
+        templateUrl:"template/helloTmpl.html",
+        restrict : "AE",
+        scope: {},
+        controller : function ($scope, $element, $attrs, $transclude) {
+          $scope.name = $attrs.name || $scope.name;
+        }
+      }
+    });
+  </script>
+</head>
+<body ng-controller="demoCtrl">
+  <div hello name="google"></div>
+  <div hello name="naver"></div>
+  <div hello></div>
+</body>
+</html>

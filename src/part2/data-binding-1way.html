@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <title>one way data binding</title>
+ <script src="../jquery/jquery-1.9.1.min.js"></script>
+ <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.js"></script>
+ <script>
+ $(function() {
+  var menuList = [
+   {itemId : 1, itemName : '샌드위치', itemPrice: 2000, itemCount : 0},
+   {itemId : 2, itemName : '아메리카노', itemPrice: 1000, itemCount : 0},
+   {itemId : 3, itemName : '카푸치노', itemPrice: 1500, itemCount : 0}
+  ];
+
+  var menuListTpl = $("#menuListTpl").html();
+  var invoiceTpl = $("#invoiceTpl").html();
+  
+  var menuListHtml = Mustache.render(menuListTpl, menuList);
+  var invoiceHtml = Mustache.render(invoiceTpl, {totalPrice: 0 });
+
+  var invoiceEl = $("#invoice").html(invoiceHtml);
+  
+  $("#menu-list").html(menuListHtml);
+
+  $("#addContract").click(function() {
+   var totalPrice = 0;
+   for (var i = menuList.length - 1; i >= 0; i--) {
+    $itemEl = $("#item-id-"+menuList[i].itemId);
+    var price = menuList[i].itemPrice;
+    var count = $itemEl.find(".item-count").val();
+
+    totalPrice = totalPrice + (price * Number(count));
+   };
+
+   invoiceEl.html( Mustache.render(invoiceTpl, {totalPrice: totalPrice}));
+  });
+ });
+ </script>
+</head>
+<body>
+ <div>
+   <h1>메뉴판</h1>
+   <h2>메뉴 목록</h2>
+   <div id="menu-list">
+   </div> 
+   <button id="addContract">구매</button>
+
+   <h2>구입 가격</h2>
+   <div id="invoice">
+    
+   </div>
+ </div>
+
+ <script type="text/template" id="menuListTpl">
+ <table>
+  <thead>
+   <tr><th>메뉴</th><th>가격</th><th>갯수</th></tr>
+  </thead>
+  <tbody>
+  {{#.}}
+   <tr id="item-id-{{itemId}}"><td class="item-name">{{itemName}}</td><td class="item-price">{{itemPrice}}</td><td><input class="item-count" type="text" value="{{itemCount
+   }}"</td></tr>
+  {{/.}}
+  </tbody>
+ </table>
+ </script>
+ <script type="text/template" id="invoiceTpl">
+  가격 : {{totalPrice}}
+ </script>
+</body>
+</html>
