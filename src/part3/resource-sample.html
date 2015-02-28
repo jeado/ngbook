@@ -6,9 +6,9 @@
  <script src="../angular/angular-resource.js"></script>
  <script type="text/javascript">
  angular.module('sampleApp', ['ngResource']).
-  value('mogolabApiKey','50728d46e4b088be4c29ea02').
-  run(function ($resource,mogolabApiKey) {
-   var TodoResource = $resource('https://api.mongolab.com/api/1/databases/sample/collections/todos/:todoId?apiKey=:apiKey',{ apiKey: mogolabApiKey },{
+  value('mongoLabApiKey','50728d46e4b088be4c29ea02').
+  run(function ($resource,mongoLabApiKey) {
+   var TodoResource = $resource('https://api.mongolab.com/api/1/databases/sample/collections/todos/:todoId?apiKey=:apiKey',{ apiKey: mongoLabApiKey },{
      'update' : {
        method: 'PUT'
      }
